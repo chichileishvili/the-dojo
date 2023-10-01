@@ -8,6 +8,7 @@ import Project from './pages/project/project'
 import Create from './pages/create/create'
 import Navbar from './components/navbar'
 import Sidebar from './components/sidebar'
+import OnlineUsers from './components/onlineUsers'
 function App() {
   const { user, authIsReady } = useAuthContext()
   return (
@@ -15,7 +16,7 @@ function App() {
       {authIsReady && (
         <>
           {' '}
-          <Sidebar />
+          {user && <Sidebar />}
           <div className='container'>
             <Navbar />
             <Routes>
@@ -41,6 +42,7 @@ function App() {
               />
             </Routes>
           </div>
+          {user && <OnlineUsers />}
         </>
       )}
     </div>
