@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react'
 import './create.css'
 import Select from 'react-select'
 import { useCollection } from '../../hooks/useCollection'
+import { timestamp } from '../../firebase/config'
+import { useFirestore } from '../../hooks/useFirestore'
+import { useAuthContext } from '../../hooks/useAuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const categories = [
   { value: 'development', label: 'Development' },
@@ -11,6 +15,8 @@ const categories = [
 ]
 
 export default function Create() {
+  const history = useNavigate()
+  const { addDocument, response } = useFirestore('projects')
   const { documents } = useCollection('users')
   const [users, setUsers] = useState([])
   const [name, setName] = useState('')
@@ -19,6 +25,7 @@ export default function Create() {
   const [category, setCategory] = useState('')
   const [assignedUsers, setAssignedUsers] = useState([])
   const [formError, setFormError] = useState(null)
+  const { user } = useAuthContext()
 
   useEffect(() => {
     if (documents) {
@@ -29,7 +36,7 @@ export default function Create() {
     }
   }, [documents])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setFormError(null)
 
@@ -41,8 +48,33 @@ export default function Create() {
       setFormError('please sign to a project at least one user')
       return
     }
+    const createdBy = {
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      id: user.uid,
+    }
+    const assignedUsersList = assignedUsers.map((u) => {
+      return {
+        displayName: u.value.displayName,
+        photoURL: u.value.photoURL,
+        id: u.value.id,
+      }
+    })
 
-    console.log(name, details, dueDate, category, assignedUsers)
+    const project = {
+      name,
+      details,
+      category: category.value,
+      dueDate: timestamp.fromDate(new Date(dueDate)),
+      comments: [],
+      createdBy,
+      assignedUsersList,
+    }
+
+    await addDocument(project)
+    if (!response.error) {
+      history('/')
+    }
   }
 
   return (
