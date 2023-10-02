@@ -8,7 +8,7 @@ export default function ProjectSummary({ project }) {
         <h2 className='page-title'></h2>
         <p className='due-date'>Project due date {project.dueDate.toDate().toDateString()}</p>
         <p className='details'>{project.details}</p>
-        <h4>project is assigned to:</h4>
+        <h5>project is assigned to:</h5>
         <div className='assigned-users'>
           {project.assignedUsersList.map((user) => (
             <div key={user.id}>
