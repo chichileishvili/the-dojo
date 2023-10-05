@@ -1,6 +1,7 @@
 import './login.css'
 import { useState } from 'react'
 import { useLogin } from '../../hooks/useLogin'
+import Spinner from '../../components/spinner/spinner.component'
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -28,7 +29,12 @@ export default function Login() {
       </label>
 
       {!isPending && <button className='btn'> Login</button>}
-      {isPending && <button className='btn'> loading</button>}
+      {isPending && (
+        <button className='btn'>
+          {' '}
+          <Spinner />
+        </button>
+      )}
       {error && <div className='error'>{error}</div>}
     </form>
   )

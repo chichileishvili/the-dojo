@@ -3,6 +3,7 @@ import Temple from '../assets/temple.svg'
 import { useLogout } from '../hooks/useLogout'
 import { Link } from 'react-router-dom'
 import { useAuthContext } from '../hooks/useAuthContext'
+import Spinner from './spinner/spinner.component'
 
 export default function Navbar() {
   const { logout, isPending } = useLogout()
@@ -37,8 +38,13 @@ export default function Navbar() {
             {isPending && (
               <button className='btn' disabled>
                 {' '}
-                Loging out...
+                <Spinner />
               </button>
+            )}
+            {user && (
+              <Link to='/options'>
+                <button className='btn'>Settings</button>
+              </Link>
             )}
           </li>
         )}

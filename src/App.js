@@ -9,6 +9,7 @@ import Create from './pages/create/create'
 import Navbar from './components/navbar'
 import Sidebar from './components/sidebar'
 import OnlineUsers from './components/onlineUsers'
+import Options from './pages/options/options'
 function App() {
   const { user, authIsReady } = useAuthContext()
   return (
@@ -40,6 +41,7 @@ function App() {
                 path='projects/:id'
                 element={(!user && <Navigate to='/login' />) || (user && <Project />)}
               />
+              <Route path='options' element={(user && <Options />) || <Navigate to='/login' />} />
             </Routes>
           </div>
           {user && <OnlineUsers />}
